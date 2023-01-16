@@ -1,4 +1,4 @@
-package dtos;
+package com.alitpc25.twitterclone.dtos;
 
 public class UserDto {
     private String username;

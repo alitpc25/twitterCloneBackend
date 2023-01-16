@@ -1,9 +1,10 @@
-package requests;
+package com.alitpc25.twitterclone.requests;
 
 public class UserRegisterRequest {
     private final String username;
     private final String email;
     private final String password;
+    
 	public String getUsername() {
 		return username;
 	}
