@@ -2,7 +2,6 @@ package com.alitpc25.twitterclone.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 import com.alitpc25.twitterclone.dtos.UserDto;

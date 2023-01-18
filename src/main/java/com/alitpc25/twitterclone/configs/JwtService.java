@@ -57,7 +57,7 @@ public class JwtService {
 				.setClaims(extraClaims)
 				.setSubject(userDetails.getUsername()) // Our subject for token is username.
 				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000*60*24))
+				.setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*6))
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
 				.compact();
 	}
@@ -68,11 +68,11 @@ public class JwtService {
 		return username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
 	}
 	
-	private boolean isTokenExpired(String jwtToken) {
+	public boolean isTokenExpired(String jwtToken) {
 		return extractExpirationDate(jwtToken).before(new Date());
 	}
 	
-	private Date  extractExpirationDate(String jwtToken) {
+	public Date extractExpirationDate(String jwtToken) {
 		return extractClaim(jwtToken, Claims::getExpiration);
 	}
 	

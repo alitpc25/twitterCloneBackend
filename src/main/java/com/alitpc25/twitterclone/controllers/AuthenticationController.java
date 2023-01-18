@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alitpc25.twitterclone.requests.AuthenticateRequest;
+import com.alitpc25.twitterclone.requests.UserLoginRequest;
 import com.alitpc25.twitterclone.requests.UserRegisterRequest;
 import com.alitpc25.twitterclone.responses.AuthenticationResponse;
 import com.alitpc25.twitterclone.services.AuthenticationService;
@@ -28,9 +29,9 @@ public class AuthenticationController {
     	return new ResponseEntity<>(authenticationResponse, HttpStatus.CREATED);
     }
     
-    @PostMapping(path = "/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AuthenticateRequest authenticateRequest) {
-    	AuthenticationResponse authenticationResponse = authenticationService.authenticateUser(authenticateRequest);
+    @PostMapping(path = "/login")
+    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody UserLoginRequest userLoginRequest) {
+    	AuthenticationResponse authenticationResponse = authenticationService.loginUser(userLoginRequest);
     	return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 }
