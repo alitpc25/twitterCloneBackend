@@ -1,12 +1,14 @@
 package com.alitpc25.twitterclone.repositories;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.List;
+
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 import com.alitpc25.twitterclone.models.User;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String>  {
+public interface UserRepository extends Neo4jRepository<User, Long>  {
 
 	User findByUsername(String username);
 
@@ -15,4 +17,6 @@ public interface UserRepository extends MongoRepository<User, String>  {
 	boolean existsByEmail(String email);
 
 	User findByEmail(String email);
+	
+	List<User> findByFriendsUsername(String username);
 }

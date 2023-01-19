@@ -1,23 +1,36 @@
 package com.alitpc25.twitterclone.models;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Document("users")
+@Node
 public class User implements UserDetails {
-    @Id
-    private String id;
+	@Id
+	@GeneratedValue 
+    private Long id;
 
     private String username;
     private String email;
     private String password;
     private Role role;
+    
+    private User() {}
+    
+    public User(String username) {this.username = username;}
     
 	public User(String username, String email, String password, Role role) {
 		this.username = username;
@@ -25,12 +38,32 @@ public class User implements UserDetails {
 		this.password = password;
 		this.role = role;
 	}
+	
+	private Set<User> followers;
+	
+	@Relationship(type = "FOLLOWING")
+	private Set<User> followings;
+	
+	public void hasFriendshipWith(User person) {
+		if (followings == null) {
+			followings = new HashSet<>();
+	    }
+		followings.add(person);
+  	}
+	
+	public String toString() {
+		    return this.username + "'s friends => "
+		    	+ Optional.ofNullable(this.followings).orElse(
+		    	Collections.emptySet()).stream()
+		    	.map(User::getUsername)
+		    	.collect(Collectors.toList());
+	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -81,6 +114,22 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public Set<User> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<User> followers) {
+		this.followers = followers;
+	}
+	
+	public Set<User> getFollowings() {
+		return followers;
+	}
+
+	public void setFollowings(Set<User> followings) {
+		this.followings = followings;
 	}
 	
 }
