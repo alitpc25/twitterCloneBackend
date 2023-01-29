@@ -1,6 +1,5 @@
 package com.alitpc25.twitterclone.configs;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -23,11 +22,6 @@ public class ApplicationConfig {
 	
 	public ApplicationConfig(@Lazy UserService userService) {
 		this.userService = userService;
-	}
-	
-	@Bean
-	public ModelMapper modelMapper(){
-		return new ModelMapper();
 	}
 
 	@Bean

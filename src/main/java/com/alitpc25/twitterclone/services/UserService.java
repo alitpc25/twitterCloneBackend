@@ -1,7 +1,6 @@
 package com.alitpc25.twitterclone.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.alitpc25.twitterclone.dtos.UserDto;
@@ -23,7 +22,7 @@ public class UserService {
 
 	public List<UserDto> getAllUsers() {
 		List<User> users = userRepository.findAll();
-		return users.stream().map(userDtoConverter::convertToDto).collect(Collectors.toList());
+		return userDtoConverter.convertToDtoList(users);
 	}
 
 	public UserDto getByUsername(String username) {

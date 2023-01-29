@@ -1,9 +1,18 @@
 package com.alitpc25.twitterclone.models;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+
 public class Post {
+	
+	@Id
+	@GeneratedValue(generatorClass = UUIDStringGenerator.class)
 	private String id;
+	
 	private String text;
 	private String image;
+	
 	public String getId() {
 		return id;
 	}
@@ -22,8 +31,7 @@ public class Post {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public Post(String id, String text, String image) {
-		this.id = id;
+	public Post(String text, String image) {
 		this.text = text;
 		this.image = image;
 	}

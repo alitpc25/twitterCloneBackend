@@ -1,14 +1,44 @@
 package com.alitpc25.twitterclone.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.alitpc25.twitterclone.dtos.PostDto;
+import com.alitpc25.twitterclone.models.Post;
 import com.alitpc25.twitterclone.repositories.PostRepository;
+import com.alitpc25.twitterclone.requests.PostCreateRequest;
+import com.alitpc25.twitterclone.utils.PostDtoConverter;
 
 @Service
 public class PostService {
 	private final PostRepository postRepository;
+	private final PostDtoConverter postDtoConverter;
 	
-	public PostService(PostRepository postRepository) {
+	public PostService(PostRepository postRepository, PostDtoConverter postDtoConverter) {
 		this.postRepository = postRepository;
+		this.postDtoConverter = postDtoConverter;
+	}
+
+	public List<PostDto> getAllByUserId(String userId) {
+		List<Post> posts = postRepository.findAllByUserId(userId);
+		return postDtoConverter.convertToDtoList(posts);
+	}
+	
+	public PostDto getById(String id) {
+		Post post = postRepository.findById(id).get();
+		return postDtoConverter.convertToDto(post);
+	}
+
+	public PostDto createPost(PostCreateRequest request) {
+		Post post = new Post(request.getText(), request.getImage());
+		postRepository.save(post);
+		return postDtoConverter.convertToDto(post);
+	}
+
+	public PostDto deletePost(String id) {
+		Post post = postRepository.findById(id).get();
+		postRepository.deleteById(id);
+		return postDtoConverter.convertToDto(post);
 	}
 }

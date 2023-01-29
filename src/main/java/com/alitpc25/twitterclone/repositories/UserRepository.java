@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.alitpc25.twitterclone.models.User;
 
 @Repository
-public interface UserRepository extends Neo4jRepository<User, Long>  {
+public interface UserRepository extends Neo4jRepository<User, String>  {
 
 	User findByUsername(String username);
 
@@ -18,5 +18,5 @@ public interface UserRepository extends Neo4jRepository<User, Long>  {
 
 	User findByEmail(String email);
 	
-	List<User> findByFriendsUsername(String username);
+	List<User> findByFollowingsUsername(String username);
 }

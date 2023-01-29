@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -20,8 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Node
 public class User implements UserDetails {
 	@Id
-	@GeneratedValue 
-    private Long id;
+	@GeneratedValue(generatorClass = UUIDStringGenerator.class)
+    private String id;
 
     private String username;
     private String email;
@@ -38,8 +39,6 @@ public class User implements UserDetails {
 		this.password = password;
 		this.role = role;
 	}
-	
-	private Set<User> followers;
 	
 	@Relationship(type = "FOLLOWING")
 	private Set<User> followings;
@@ -59,11 +58,11 @@ public class User implements UserDetails {
 		    	.collect(Collectors.toList());
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -115,17 +114,9 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
-	public Set<User> getFollowers() {
-		return followers;
-	}
-
-	public void setFollowers(Set<User> followers) {
-		this.followers = followers;
-	}
 	
 	public Set<User> getFollowings() {
-		return followers;
+		return followings;
 	}
 
 	public void setFollowings(Set<User> followings) {

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alitpc25.twitterclone.requests.AuthenticateRequest;
 import com.alitpc25.twitterclone.requests.UserLoginRequest;
 import com.alitpc25.twitterclone.requests.UserRegisterRequest;
 import com.alitpc25.twitterclone.responses.AuthenticationResponse;
