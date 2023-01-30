@@ -1,11 +1,15 @@
 package com.alitpc25.twitterclone.services;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.stereotype.Service;
 
 import com.alitpc25.twitterclone.dtos.PostDto;
 import com.alitpc25.twitterclone.models.Post;
+import com.alitpc25.twitterclone.models.User;
 import com.alitpc25.twitterclone.repositories.PostRepository;
 import com.alitpc25.twitterclone.requests.PostCreateRequest;
 import com.alitpc25.twitterclone.utils.PostDtoConverter;
@@ -14,10 +18,12 @@ import com.alitpc25.twitterclone.utils.PostDtoConverter;
 public class PostService {
 	private final PostRepository postRepository;
 	private final PostDtoConverter postDtoConverter;
+	private final UserService userService;
 	
-	public PostService(PostRepository postRepository, PostDtoConverter postDtoConverter) {
+	public PostService(PostRepository postRepository, PostDtoConverter postDtoConverter, UserService userService) {
 		this.postRepository = postRepository;
 		this.postDtoConverter = postDtoConverter;
+		this.userService = userService;
 	}
 
 	public List<PostDto> getAllByUserId(String userId) {
@@ -30,8 +36,10 @@ public class PostService {
 		return postDtoConverter.convertToDto(post);
 	}
 
-	public PostDto createPost(PostCreateRequest request) {
-		Post post = new Post(request.getText(), request.getImage());
+	public PostDto createPost(PostCreateRequest request) throws IOException {
+		Post post = new Post(request.getText(), new Binary(BsonBinarySubType.BINARY, request.getImage().getBytes()));
+		User user = userService.getByUsernamePriv(request.getUsername());
+		post.setUser(user);
 		postRepository.save(post);
 		return postDtoConverter.convertToDto(post);
 	}

@@ -1,13 +1,17 @@
 package com.alitpc25.twitterclone.requests;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class PostCreateRequest {
 	
 	private String text;
-	private String image;
+	private MultipartFile image;
+	private String username;
 	
-	public PostCreateRequest(String text, String image) {
+	public PostCreateRequest(String text, MultipartFile image, String username) {
+		this.setUsername(username);
 		this.text = text;
-		this.image = image;
+		this.setImage(image);
 	}
 	public String getText() {
 		return text;
@@ -15,10 +19,16 @@ public class PostCreateRequest {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public String getImage() {
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public MultipartFile getImage() {
 		return image;
 	}
-	public void setImage(String image) {
+	public void setImage(MultipartFile image) {
 		this.image = image;
 	}
 

@@ -8,26 +8,27 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Node
+@Document
 public class User implements UserDetails {
 	@Id
-	@GeneratedValue(generatorClass = UUIDStringGenerator.class)
     private String id;
 
     private String username;
     private String email;
     private String password;
     private Role role;
+    
+	private Set<User> followings;
+	
+	@DocumentReference
+	private Set<Post> posts;
     
     private User() {}
     
@@ -39,9 +40,6 @@ public class User implements UserDetails {
 		this.password = password;
 		this.role = role;
 	}
-	
-	@Relationship(type = "FOLLOWING")
-	private Set<User> followings;
 	
 	public void hasFriendshipWith(User person) {
 		if (followings == null) {

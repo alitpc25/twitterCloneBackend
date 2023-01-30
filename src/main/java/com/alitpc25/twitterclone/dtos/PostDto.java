@@ -6,7 +6,7 @@ public class PostDto {
 	
 	public PostDto(String text, String image) {
 		this.text = text;
-		this.image = image;
+		this.setImage(image);
 	}
 	public String getText() {
 		return text;
