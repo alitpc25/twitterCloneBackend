@@ -37,7 +37,10 @@ public class PostService {
 	}
 
 	public PostDto createPost(PostCreateRequest request, String userId) throws IOException {
-		Post post = new Post(request.getText(), new Binary(BsonBinarySubType.BINARY, request.getImage().getBytes()));
+		Post post = new Post(request.getText());
+		if(request.getImage() != null) {
+			post.setImage(new Binary(BsonBinarySubType.BINARY, request.getImage().getBytes()));
+		}
 		User user = userService.getByIdPriv(userId);
 		post.setUser(user);
 		postRepository.save(post);

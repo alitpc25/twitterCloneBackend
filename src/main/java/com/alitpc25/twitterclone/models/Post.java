@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
+import com.mongodb.lang.Nullable;
+
 @Document
 public class Post {
 	
@@ -14,7 +16,10 @@ public class Post {
 	@GeneratedValue(generatorClass = UUIDStringGenerator.class)
 	private String id;
 	
+	@Nullable
 	private String text;
+	
+	@Nullable
 	private Binary image;
 	
 	@DocumentReference(lazy=true)
@@ -32,6 +37,9 @@ public class Post {
 		return text;
 	}
 	public void setText(String text) {
+		this.text = text;
+	}
+	public Post(String text) {
 		this.text = text;
 	}
 	public Post(String text, Binary image) {
