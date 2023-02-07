@@ -2,11 +2,13 @@ package com.alitpc25.twitterclone.dtos;
 
 public class UserDto {
     private String username;
+    private String image;
     
     public UserDto() {}
     
-	public UserDto(String username) {
+	public UserDto(String username, String image) {
 		this.username = username;
+		this.image = image;
 	}
 
 	public String getUsername() {
@@ -15,5 +17,13 @@ public class UserDto {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

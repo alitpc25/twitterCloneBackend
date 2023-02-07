@@ -36,9 +36,9 @@ public class PostService {
 		return postDtoConverter.convertToDto(post);
 	}
 
-	public PostDto createPost(PostCreateRequest request) throws IOException {
+	public PostDto createPost(PostCreateRequest request, String userId) throws IOException {
 		Post post = new Post(request.getText(), new Binary(BsonBinarySubType.BINARY, request.getImage().getBytes()));
-		User user = userService.getByUsernamePriv(request.getUsername());
+		User user = userService.getByIdPriv(userId);
 		post.setUser(user);
 		postRepository.save(post);
 		return postDtoConverter.convertToDto(post);

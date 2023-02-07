@@ -40,8 +40,8 @@ public class PostController {
 	
 	@RequestMapping(value = "", method = RequestMethod.POST,
 			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<PostDto> createPost(@ModelAttribute PostCreateRequest request) throws IOException {
-		return new ResponseEntity<>(postService.createPost(request) ,HttpStatus.OK);
+	public ResponseEntity<PostDto> createPost(@ModelAttribute PostCreateRequest request, @RequestParam String userId) throws IOException {
+		return new ResponseEntity<>(postService.createPost(request, userId) ,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/id")

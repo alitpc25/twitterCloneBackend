@@ -1,22 +1,18 @@
 package com.alitpc25.twitterclone.models;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Document
-public class User implements UserDetails {
+public class User {
 	@Id
     private String id;
 
@@ -24,6 +20,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private Role role;
+    
+    private Binary image;
     
 	private Set<User> followings;
 	
@@ -38,7 +36,7 @@ public class User implements UserDetails {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.role = role;
+		this.setRole(role);
 	}
 	
 	public void hasFriendshipWith(User person) {
@@ -87,31 +85,6 @@ public class User implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
 	
 	public Set<User> getFollowings() {
 		return followings;
@@ -119,6 +92,21 @@ public class User implements UserDetails {
 
 	public void setFollowings(Set<User> followings) {
 		this.followings = followings;
+	}
+	
+	public Binary getImage() {
+		return image;
+	}
+	public void setImage(Binary image) {
+		this.image = image;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 }

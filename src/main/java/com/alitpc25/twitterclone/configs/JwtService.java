@@ -21,8 +21,8 @@ public class JwtService {
 	//Secret key is a random 256-bit encryption key
 	private static final String SECRET_KEY = "76397924423F4528482B4D6251655468576D5A7134743777217A25432A462D4A";
 
-	public String extractUsername(String jwtToken) {
-		return extractClaim(jwtToken, Claims::getSubject); // Subject is username of the user, we chosed it so.
+	public String extractEmail(String jwtToken) {
+		return extractClaim(jwtToken, Claims::getSubject); // Subject is email of the user, we chosed it so.
 	}
 	
 	public <T> T extractClaim(String jwtToken, Function<Claims, T> claimsResolver) {
@@ -55,7 +55,7 @@ public class JwtService {
 		return Jwts
 				.builder()
 				.setClaims(extraClaims)
-				.setSubject(userDetails.getUsername()) // Our subject for token is username.
+				.setSubject(userDetails.getUsername()) // Our subject for token is email.
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*6))
 				.signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -63,9 +63,9 @@ public class JwtService {
 	}
 	
 	public boolean isTokenValid(String jwtToken, UserDetails userDetails) {
-		final String username = extractUsername(jwtToken);
+		final String email = extractEmail(jwtToken);
 		// We should look at UserDetails to see if the username subject equals to the username in UserDetails class provided by Spring security
-		return username.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
+		return email.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken);
 	}
 	
 	public boolean isTokenExpired(String jwtToken) {
