@@ -31,6 +31,11 @@ public class PostService {
 		return postDtoConverter.convertToDtoList(posts);
 	}
 	
+	public List<PostDto> getAllByUsername(String username) {
+		User user = userService.getByUsernamePriv(username);
+		return getAllByUserId(user.getId());
+	}
+	
 	public PostDto getById(String id) {
 		Post post = postRepository.findById(id).get();
 		return postDtoConverter.convertToDto(post);

@@ -1,6 +1,9 @@
 package com.alitpc25.twitterclone.models;
 
+import java.time.LocalDateTime;
+
 import org.bson.types.Binary;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -25,6 +28,17 @@ public class Post {
 	@DocumentReference(lazy=true)
 	private User user;
 	
+	@CreatedDate
+	private LocalDateTime createdDate;
+	
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
 	public Post() {}
 	
 	public String getId() {

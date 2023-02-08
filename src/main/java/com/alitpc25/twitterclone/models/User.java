@@ -1,5 +1,6 @@
 package com.alitpc25.twitterclone.models;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -7,7 +8,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bson.types.Binary;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
@@ -16,7 +19,9 @@ public class User {
 	@Id
     private String id;
 
+	@Indexed
     private String username;
+	
     private String email;
     private String password;
     private Role role;
@@ -27,8 +32,19 @@ public class User {
 	
 	@DocumentReference
 	private Set<Post> posts;
+	
+	@CreatedDate
+	private LocalDateTime createdDate;
     
-    private User() {}
+    public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	private User() {}
     
     public User(String username) {this.username = username;}
     

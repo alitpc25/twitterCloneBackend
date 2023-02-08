@@ -12,7 +12,7 @@ import com.alitpc25.twitterclone.models.Post;
 @Service
 public class PostDtoConverter {
 	public PostDto convertToDto(Post post) {
-		PostDto postDto = new PostDto(post.getText());
+		PostDto postDto = new PostDto(post.getText(), post.getCreatedDate().toString());
 		if(post.getImage() != null) {
 			postDto.setImage(Base64.getEncoder().encodeToString(post.getImage().getData()));
 		}

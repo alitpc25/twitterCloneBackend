@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +28,19 @@ public class UserService {
 		this.userRepository = userRepository;
 		this.userDtoConverter = userDtoConverter;
 	}
-
+	/*
 	public List<UserDto> getAllUsers() {
 		List<User> users = userRepository.findAll();
 		return userDtoConverter.convertToDtoList(users);
 	}
+	*/
 
 	public UserDto getById(String id) {
 		return userDtoConverter.convertToDto(getByIdPriv(id));
+	}
+	
+	public UserDto getByUsername(String username) {
+		return userDtoConverter.convertToDto(getByUsernamePriv(username));
 	}
 	
 	public User getByIdPriv(String id) {
@@ -79,6 +86,14 @@ public class UserService {
 			throw new UserNotFoundException();
 		}
 		return new UserDetail(user.getEmail(), user.getPassword(), user.getRole());
+	}
+
+	public Page<UserDto> getAllSearchByUsername(Integer page, Integer size, String username) {
+		Page<User> users = userRepository.findByUsernameContainingIgnoreCase(PageRequest.of(page-1, size), username);
+		if(users == null || users.isEmpty()) {
+			throw new UserNotFoundException("There exists no candidate called "+ username);
+		}
+		return userDtoConverter.convertToDtoList(users);
 	}
 
 }

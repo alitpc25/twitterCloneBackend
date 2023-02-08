@@ -28,9 +28,14 @@ public class PostController {
 		this.postService = postService;
 	}
 	
-	@GetMapping("")
+	@RequestMapping(value = "", method = RequestMethod.GET ,params = "userId")
 	public ResponseEntity<List<PostDto>> getAllByUserId(@RequestParam String userId) {
 		return new ResponseEntity<>(postService.getAllByUserId(userId) ,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "", method = RequestMethod.GET ,params = "username")
+	public ResponseEntity<List<PostDto>> getAllByUsername(@RequestParam String username) {
+		return new ResponseEntity<>(postService.getAllByUsername(username) ,HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
