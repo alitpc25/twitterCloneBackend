@@ -14,21 +14,17 @@ import com.alitpc25.twitterclone.models.User;
 import com.alitpc25.twitterclone.repositories.PostRepository;
 import com.alitpc25.twitterclone.requests.PostCreateRequest;
 import com.alitpc25.twitterclone.utils.PostDtoConverter;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.Storage;
 
 @Service
 public class PostService {
 	private final PostRepository postRepository;
 	private final PostDtoConverter postDtoConverter;
 	private final UserService userService;
-	private final Storage firebaseStorage;
 	
-	public PostService(PostRepository postRepository, PostDtoConverter postDtoConverter, UserService userService, Storage firebaseStorage) {
+	public PostService(PostRepository postRepository, PostDtoConverter postDtoConverter, UserService userService) {
 		this.postRepository = postRepository;
 		this.postDtoConverter = postDtoConverter;
 		this.userService = userService;
-		this.firebaseStorage = firebaseStorage;
 	}
 
 	public List<PostDto> getAllByUserId(String userId) {
@@ -59,9 +55,7 @@ public class PostService {
 
 	public PostDto deletePost(String id) {
 		Post post = postRepository.findById(id).get();
-		BlobId blobId = BlobId.of("twitter-clone-app-d3449.appspot.com", post.getImageId());
 		postRepository.deleteById(id);
-		firebaseStorage.delete(blobId);
 		return postDtoConverter.convertToDto(post);
 	}
 
