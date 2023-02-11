@@ -1,23 +1,15 @@
 package com.alitpc25.twitterclone.requests;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class UserUpdateRequest {
 
 	private String newUsername;
-	private MultipartFile image;
 	private String username;
+	private String imageId;
 	
-	public UserUpdateRequest(String newUsername, MultipartFile image, String username) {
-		this.setNewUsername(newUsername);
-		this.image = image;
+	public UserUpdateRequest(String newUsername, String username, String imageId) {
+		this.newUsername = newUsername;
 		this.username = username;
-	}
-	public MultipartFile getImage() {
-		return image;
-	}
-	public void setImage(MultipartFile image) {
-		this.image = image;
+		this.setImageId(imageId);
 	}
 	public String getUsername() {
 		return username;
@@ -30,6 +22,12 @@ public class UserUpdateRequest {
 	}
 	public void setNewUsername(String newUsername) {
 		this.newUsername = newUsername;
+	}
+	public String getImageId() {
+		return imageId;
+	}
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 	
 }

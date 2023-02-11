@@ -23,4 +23,6 @@ public interface UserRepository extends MongoRepository<User, String>  {
 	List<User> findByFollowingsUsername(String username);
 
 	Page<User> findByUsernameContainingIgnoreCase(PageRequest of, String username);
+	
+	
 }

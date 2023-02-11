@@ -2,14 +2,14 @@ package com.alitpc25.twitterclone.dtos;
 
 public class UserDto {
     private String username;
-    private String image;
+    private String imageId;
     private String createdDate;
     
     public UserDto() {}
     
-	public UserDto(String username, String image, String createdDate) {
+	public UserDto(String username, String imageId, String createdDate) {
 		this.username = username;
-		this.image = image;
+		this.imageId = imageId;
 		this.createdDate = createdDate;
 	}
 
@@ -21,12 +21,12 @@ public class UserDto {
 		this.username = username;
 	}
 
-	public String getImage() {
-		return image;
+	public String getImageId() {
+		return imageId;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 	public String getCreatedDate() {

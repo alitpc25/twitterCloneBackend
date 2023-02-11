@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,14 +43,18 @@ public class PostController {
 		return new ResponseEntity<>(postService.getById(postId) ,HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "", method = RequestMethod.POST,
-			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<PostDto> createPost(@ModelAttribute PostCreateRequest request, @RequestParam String userId) throws IOException {
+	@PostMapping()
+	public ResponseEntity<PostDto> createPost(@RequestBody PostCreateRequest request, @RequestParam String userId) throws IOException {
 		return new ResponseEntity<>(postService.createPost(request, userId) ,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/id")
 	public ResponseEntity<PostDto> deletePost(@PathVariable String id) {
 		return new ResponseEntity<>(postService.deletePost(id) ,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getAll", method = RequestMethod.GET ,params = "username")
+	public ResponseEntity<List<PostDto>> getAllPostsOfFollowingsByUserId(@RequestParam String username) {
+		return new ResponseEntity<>(postService.getAllPostsOfFollowingsByUsername(username) ,HttpStatus.OK);
 	}
 }

@@ -2,9 +2,9 @@ package com.alitpc25.twitterclone.models;
 
 import java.time.LocalDateTime;
 
-import org.bson.types.Binary;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -13,7 +13,7 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import com.mongodb.lang.Nullable;
 
 @Document
-public class Post {
+public class Post implements Comparable<Post> {
 	
 	@Id
 	@GeneratedValue(generatorClass = UUIDStringGenerator.class)
@@ -23,9 +23,10 @@ public class Post {
 	private String text;
 	
 	@Nullable
-	private Binary image;
+	private String imageId;
 	
 	@DocumentReference(lazy=true)
+	@Indexed
 	private User user;
 	
 	@CreatedDate
@@ -56,9 +57,9 @@ public class Post {
 	public Post(String text) {
 		this.text = text;
 	}
-	public Post(String text, Binary image) {
+	public Post(String text, String imageId) {
 		this.text = text;
-		this.setImage(image);
+		this.setImageId(imageId);
 	}
 	public User getUser() {
 		return user;
@@ -66,11 +67,21 @@ public class Post {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public Binary getImage() {
-		return image;
+	public String getImageId() {
+		return imageId;
 	}
-	public void setImage(Binary image) {
-		this.image = image;
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
+	}
+
+	@Override
+	public int compareTo(Post o) {
+		if(createdDate==o.createdDate)  
+				return 0;  
+		else if(createdDate.isAfter(o.createdDate))  
+			return 1;  
+		else  
+			return -1;  
 	}
 	
 }

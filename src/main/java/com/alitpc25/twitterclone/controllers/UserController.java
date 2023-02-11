@@ -5,17 +5,18 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alitpc25.twitterclone.dtos.UserDto;
+import com.alitpc25.twitterclone.requests.UserFollowRequest;
 import com.alitpc25.twitterclone.requests.UserUpdateRequest;
 import com.alitpc25.twitterclone.services.UserService;
 
@@ -46,9 +47,8 @@ public class UserController {
     	return new ResponseEntity<>(userService.getByUsername(username), HttpStatus.OK);
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST,
-			consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<UserDto> updateUser(@ModelAttribute UserUpdateRequest request, @PathVariable String id) throws IOException {
+    @PutMapping("/{id}")
+	public ResponseEntity<UserDto> updateUser(@RequestBody UserUpdateRequest request, @PathVariable String id) throws IOException {
 		return new ResponseEntity<>(userService.updateUser(request, id) ,HttpStatus.OK);
 	}
     
@@ -59,5 +59,15 @@ public class UserController {
 			@RequestParam(value = "username", defaultValue = "") String username) {
 		return ResponseEntity.ok(userService.getAllSearchByUsername(page, size, username));
 	}
+    
+    @RequestMapping(value = "/follow", method = RequestMethod.PUT)
+    public ResponseEntity<UserDto> follow(@RequestBody UserFollowRequest request) {
+    	return ResponseEntity.ok(userService.follow(request));
+    }
+    
+    @GetMapping("/getFollowedUsers")
+    public ResponseEntity<List<UserDto>> getFollowedUsers(@RequestParam("from") String from) {
+    	return ResponseEntity.ok(userService.getFollowedUsers(from));
+    }
 
 }

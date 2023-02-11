@@ -1,9 +1,5 @@
 package com.alitpc25.twitterclone.utils;
 
-import java.util.Base64;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 import com.alitpc25.twitterclone.dtos.PostDto;
@@ -12,14 +8,13 @@ import com.alitpc25.twitterclone.models.Post;
 @Service
 public class PostDtoConverter {
 	public PostDto convertToDto(Post post) {
-		PostDto postDto = new PostDto(post.getText(), post.getCreatedDate().toString());
-		if(post.getImage() != null) {
-			postDto.setImage(Base64.getEncoder().encodeToString(post.getImage().getData()));
+		PostDto postDto = new PostDto(post.getText(), post.getCreatedDate().toString(), post.getUser().getUsername());
+		if(post.getImageId() != null) {
+			postDto.setImageId(post.getImageId());
+		}
+		if(post.getUser().getImageId() != null) {
+			postDto.setUserImage(post.getUser().getImageId());
 		}
 	    return postDto;
-	}
-	
-	public List<PostDto> convertToDtoList(List<Post> posts) {
-		return posts.stream().map(this::convertToDto).collect(Collectors.toList());
 	}
 }

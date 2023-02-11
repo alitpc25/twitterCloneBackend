@@ -26,23 +26,13 @@ public class User {
     private String password;
     private Role role;
     
-    private Binary image;
+    private String imageId;
     
-	private Set<User> followings;
-	
-	@DocumentReference
-	private Set<Post> posts;
+    @DocumentReference
+	private Set<User> followings = new HashSet<>();
 	
 	@CreatedDate
 	private LocalDateTime createdDate;
-    
-    public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
 
 	private User() {}
     
@@ -105,16 +95,20 @@ public class User {
 	public Set<User> getFollowings() {
 		return followings;
 	}
+	
+    public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
 
-	public void setFollowings(Set<User> followings) {
-		this.followings = followings;
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 	
-	public Binary getImage() {
-		return image;
+	public String getImageId() {
+		return imageId;
 	}
-	public void setImage(Binary image) {
-		this.image = image;
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 
 	public Role getRole() {

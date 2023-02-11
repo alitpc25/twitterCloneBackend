@@ -1,10 +1,8 @@
 package com.alitpc25.twitterclone.services;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.BsonBinarySubType;
-import org.bson.types.Binary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +13,7 @@ import com.alitpc25.twitterclone.exceptions.UserNotFoundException;
 import com.alitpc25.twitterclone.models.User;
 import com.alitpc25.twitterclone.models.UserDetail;
 import com.alitpc25.twitterclone.repositories.UserRepository;
+import com.alitpc25.twitterclone.requests.UserFollowRequest;
 import com.alitpc25.twitterclone.requests.UserUpdateRequest;
 import com.alitpc25.twitterclone.utils.UserDtoConverter;
 
@@ -67,15 +66,8 @@ public class UserService {
 		if(request.getUsername() != request.getNewUsername()) {
 			user.setUsername(request.getNewUsername());
 		}
-		Binary newImageBinary;
-		try {
-			newImageBinary = new Binary(BsonBinarySubType.BINARY, request.getImage().getBytes());
-			if(newImageBinary != user.getImage()) {
-				user.setImage(newImageBinary);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(user.getImageId() == null && request.getImageId() != null){
+			user.setImageId(request.getImageId());
 		}
 		return userDtoConverter.convertToDto(userRepository.save(user));
 	}
@@ -94,6 +86,25 @@ public class UserService {
 			throw new UserNotFoundException("There exists no candidate called "+ username);
 		}
 		return userDtoConverter.convertToDtoList(users);
+	}
+
+	public UserDto follow(UserFollowRequest request) {
+		User senderUser = getByUsernamePriv(request.getSender());
+		User receiverUser = getByUsernamePriv(request.getReceiver());
+		senderUser.getFollowings().add(receiverUser);
+		return userDtoConverter.convertToDto(userRepository.save(senderUser));
+	}
+
+	public List<UserDto> getFollowedUsers(String from) {
+		User fromUser = getByUsernamePriv(from);
+		List<User> followedUsers = new ArrayList<User>(fromUser.getFollowings());
+		return followedUsers.stream().map(userDtoConverter::convertToDto).toList();
+	}
+	
+	public List<User> getFollowedUsersPriv(String from) {
+		User fromUser = getByUsernamePriv(from);
+		List<User> followedUsers = new ArrayList<User>(fromUser.getFollowings());
+		return followedUsers;
 	}
 
 }

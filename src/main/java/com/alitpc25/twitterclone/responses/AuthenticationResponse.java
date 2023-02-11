@@ -5,13 +5,13 @@ public class AuthenticationResponse {
 	private String token;
 	private String username;
 	private String userId;
-	private String image;
+	private String imageId;
 
-	public AuthenticationResponse(String token, String username, String userId, String image) {
+	public AuthenticationResponse(String token, String username, String userId, String imageId) {
 		this.token = token;
 		this.userId = userId;
 		this.username = username;
-		this.image = image;
+		this.imageId = imageId;
 	}
 
 	public String getToken() {
@@ -38,12 +38,12 @@ public class AuthenticationResponse {
 		this.userId = userId;
 	}
 
-	public String getImage() {
-		return image;
+	public String getImageId() {
+		return imageId;
 	}
 
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 	
 }

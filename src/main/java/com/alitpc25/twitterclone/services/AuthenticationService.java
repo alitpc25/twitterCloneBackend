@@ -1,10 +1,5 @@
 package com.alitpc25.twitterclone.services;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Base64;
-
-import org.bson.types.Binary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,15 +44,10 @@ public class AuthenticationService {
 		}
 		
 		User userToSave = new User(userRegisterRequest.getUsername(), userRegisterRequest.getEmail(), passwordEncoder.encode(userRegisterRequest.getPassword()), Role.USER);
-		try {
-			userToSave.setImage(new Binary(Files.readAllBytes(Paths.get("src/main/resources/static/images/avatar.jpg"))));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		userRepository.save(userToSave);
 		UserDetail userDetail = new UserDetail(userToSave.getEmail(), userToSave.getPassword(), userToSave.getRole());
 		String jwtToken = jwtService.generateToken(userDetail);
-		return new AuthenticationResponse(jwtToken, userRegisterRequest.getUsername(), userToSave.getId(), Base64.getEncoder().encodeToString(userToSave.getImage().getData()));
+		return new AuthenticationResponse(jwtToken, userRegisterRequest.getUsername(), userToSave.getId(), userToSave.getImageId());
 	}
 	
 	public AuthenticationResponse loginUser(UserLoginRequest userLoginRequest) {
@@ -71,7 +61,7 @@ public class AuthenticationService {
 		UserDetail userDetail = new UserDetail(user.getEmail(), user.getPassword(), user.getRole());
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetail.getUsername(), userLoginRequest.getPassword()));
 		String jwtToken = jwtService.generateToken(userDetail);
-		return new AuthenticationResponse(jwtToken, user.getUsername(), user.getId(), Base64.getEncoder().encodeToString(user.getImage().getData()));
+		return new AuthenticationResponse(jwtToken, user.getUsername(), user.getId(), user.getImageId());
 	}
 
 }
