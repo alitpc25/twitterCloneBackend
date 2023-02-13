@@ -6,13 +6,16 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.alitpc25.twitterclone.dtos.UserDto;
+import com.alitpc25.twitterclone.exceptions.BadCredentialsException;
 import com.alitpc25.twitterclone.exceptions.UserNotFoundException;
 import com.alitpc25.twitterclone.models.User;
 import com.alitpc25.twitterclone.models.UserDetail;
 import com.alitpc25.twitterclone.repositories.UserRepository;
+import com.alitpc25.twitterclone.requests.UserChangeCredentialsRequest;
 import com.alitpc25.twitterclone.requests.UserFollowRequest;
 import com.alitpc25.twitterclone.requests.UserUpdateRequest;
 import com.alitpc25.twitterclone.utils.UserDtoConverter;
@@ -22,10 +25,12 @@ public class UserService {
 	
 	private final UserRepository userRepository;
 	private final UserDtoConverter userDtoConverter;
+	private final PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepository, UserDtoConverter userDtoConverter) {
+	public UserService(UserRepository userRepository, UserDtoConverter userDtoConverter, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.userDtoConverter = userDtoConverter;
+		this.passwordEncoder = passwordEncoder;
 	}
 	/*
 	public List<UserDto> getAllUsers() {
@@ -105,6 +110,16 @@ public class UserService {
 		User fromUser = getByUsernamePriv(from);
 		List<User> followedUsers = new ArrayList<User>(fromUser.getFollowings());
 		return followedUsers;
+	}
+
+	public UserDto changeCredentials(UserChangeCredentialsRequest request, String id) {
+		User user = getByIdPriv(id);
+		if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+			throw new BadCredentialsException("Wrong password.");
+		}
+		user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+		userRepository.save(user);
+		return userDtoConverter.convertToDto(user);
 	}
 
 }

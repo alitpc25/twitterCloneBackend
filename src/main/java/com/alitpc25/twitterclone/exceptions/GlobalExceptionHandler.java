@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 	   @ExceptionHandler(value = UserNotFoundException.class)
 	   public ResponseEntity<Object> userNotFoundHandler(UserNotFoundException exception) {
-	      return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
+	      return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 	   }
 	   
 	   @ExceptionHandler(value = EmailAlreadyInUseException.class)
 	   public ResponseEntity<Object> emailAlreadyInUseHandler(EmailAlreadyInUseException exception) {
-	      return new ResponseEntity<>("Email already in use.", HttpStatus.BAD_REQUEST);
+	      return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	   }
 	   
 	   @ExceptionHandler(value = UsernameAlreadyInUseException.class)
 	   public ResponseEntity<Object> usernameAlreadyInUseHandler(UsernameAlreadyInUseException exception) {
-	      return new ResponseEntity<>("Email already in use.", HttpStatus.BAD_REQUEST);
+	      return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	   }
 	   
 	   @ExceptionHandler(value = BadCredentialsException.class)
 	   public ResponseEntity<Object> badCredentialsHandler(BadCredentialsException exception) {
-	      return new ResponseEntity<>("Email already in use.", HttpStatus.BAD_REQUEST);
+	      return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	   }
 	   
 }

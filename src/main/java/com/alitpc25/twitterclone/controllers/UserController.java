@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alitpc25.twitterclone.dtos.UserDto;
+import com.alitpc25.twitterclone.requests.UserChangeCredentialsRequest;
 import com.alitpc25.twitterclone.requests.UserFollowRequest;
 import com.alitpc25.twitterclone.requests.UserUpdateRequest;
 import com.alitpc25.twitterclone.services.UserService;
@@ -50,6 +51,11 @@ public class UserController {
     @PutMapping("/{id}")
 	public ResponseEntity<UserDto> updateUser(@RequestBody UserUpdateRequest request, @PathVariable String id) throws IOException {
 		return new ResponseEntity<>(userService.updateUser(request, id) ,HttpStatus.OK);
+	}
+    
+    @PutMapping("/changeCredentials/{id}")
+	public ResponseEntity<UserDto> changeCredentials(@RequestBody UserChangeCredentialsRequest request, @PathVariable String id) throws IOException {
+		return new ResponseEntity<>(userService.changeCredentials(request, id) ,HttpStatus.OK);
 	}
     
     @GetMapping(value="", params={"page", "size", "username"})

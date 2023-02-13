@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.alitpc25.twitterclone.dtos.PostDto;
@@ -28,7 +29,7 @@ public class PostService {
 	}
 
 	public List<PostDto> getAllByUserId(String userId) {
-		List<Post> posts = postRepository.findAllByUserId(userId);
+		List<Post> posts = postRepository.findByUserId(userId);
 		return posts.stream().map(post -> postDtoConverter.convertToDto(post)).collect(Collectors.toList());
 	}
 	
@@ -62,7 +63,7 @@ public class PostService {
 	public List<PostDto> getAllPostsOfFollowingsByUsername(String username) {
 		List<User> users = userService.getFollowedUsersPriv(username);
 		List<ObjectId> userIds = users.stream().map(user -> new ObjectId(user.getId())).collect(Collectors.toList());
-		List<Post> postsOfFollowings = new ArrayList<Post>(postRepository.findAllByUserIdOrderByCreatedDate(userIds)); 
+		List<Post> postsOfFollowings = new ArrayList<Post>(postRepository.findByUserIdOrderByCreatedDateAsc(userIds, Sort.by(Sort.Direction.DESC,"createdDate"))); 
 		return postsOfFollowings.stream().map(post -> postDtoConverter.convertToDto(post)).collect(Collectors.toList());
 	}
 }
